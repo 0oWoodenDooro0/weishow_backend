@@ -1,5 +1,8 @@
 package com.gmail.vincent031525
 
+import com.gmail.vincent031525.config.plugin.configureKoin
+import com.gmail.vincent031525.config.plugin.configureSerialization
+import com.gmail.vincent031525.rest.setUpMovieRoutes
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -8,4 +11,6 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureSerialization()
+    configureKoin()
+    setUpMovieRoutes()
 }
