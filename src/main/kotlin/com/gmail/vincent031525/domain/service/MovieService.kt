@@ -7,4 +7,7 @@ class MovieService(private val repository: MovieRepository) {
     suspend fun getAllMovies(): List<MovieDto> {
         return repository.getAllMovies()
     }
+    suspend fun addMovie(movieDto: MovieDto) {
+        repository.addMovie(movieDto)
+    }
 }

@@ -1,6 +1,6 @@
 package com.gmail.vincent031525.config.plugin
 
-import com.gmail.vincent031525.data.data_source.LocalDataSource
+import com.gmail.vincent031525.data.data_source.DataSource
 import com.gmail.vincent031525.data.repository.MovieRepositoryImpl
 import com.gmail.vincent031525.domain.repository.MovieRepository
 import com.gmail.vincent031525.domain.service.MovieService
@@ -18,7 +18,7 @@ fun Application.configureKoin() {
         slf4jLogger()
         modules(module {
             singleOf(::provideDatabase)
-            singleOf(::LocalDataSource)
+            singleOf(::DataSource)
             singleOf(::MovieRepositoryImpl) { bind<MovieRepository>() }
             singleOf(::MovieService)
         })
