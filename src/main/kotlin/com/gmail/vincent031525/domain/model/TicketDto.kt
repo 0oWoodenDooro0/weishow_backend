@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TicketDto(
-    val id: Int,
+    val id: Int? = null,
     val price: Int,
     val purchseTime: LocalDateTime,
     val sessionId: Int,

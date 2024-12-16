@@ -10,6 +10,8 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.setUpMovieRoutes() {
+    val managementRepository by inject<ManagementRepository>()
+    val managerRepository by inject<ManagerRepository>()
     val memberRepository by inject<MemberRepository>()
     val movieRepository by inject<MovieRepository>()
     val screenRepository by inject<ScreenRepository>()
@@ -18,12 +20,45 @@ fun Application.setUpMovieRoutes() {
     val theaterRepository by inject<TheaterRepository>()
     val ticketRepository by inject<TicketRepository>()
     routing {
+        route("/management") {
+            post {
+                val body = call.receive<ManagementDto>()
+                val id = managementRepository.addManagement(body)
+                call.response.status(HttpStatusCode.Created)
+                call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+            }
+        }
+        route("/manager") {
+            post {
+                val body = call.receive<ManagerDto>()
+                val id = managerRepository.addManager(body)
+                call.response.status(HttpStatusCode.Created)
+                call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+            }
+        }
         route("/member") {
             post {
                 val body = call.receive<MemberDto>()
                 val id = memberRepository.addMember(body)
                 call.response.status(HttpStatusCode.Created)
                 call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+            }
+            put {
+                val body = call.receive<MemberDto>()
+                body.id?.let {
+                    memberRepository.updateMember(it, body)
+                    call.response.status(HttpStatusCode.OK)
+                    call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully added!", it))
+                    return@put
+                }
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
+            }
+            post("/login") {
+                val body = call.receive<LoginRequest>()
+                val memberDto = memberRepository.getMemberByEmailAndPassword(body)
+                call.response.status(HttpStatusCode.OK)
+                call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully logged in!", memberDto))
             }
         }
         route("/movie") {
@@ -36,6 +71,17 @@ fun Application.setUpMovieRoutes() {
                 val id = movieRepository.addMovie(body)
                 call.response.status(HttpStatusCode.Created)
                 call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+            }
+            put {
+                val body = call.receive<MovieDto>()
+                body.id?.let {
+                    movieRepository.updateMovie(it, body)
+                    call.response.status(HttpStatusCode.OK)
+                    call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully added!", it))
+                    return@put
+                }
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
             }
         }
         route("/screen") {
@@ -76,6 +122,27 @@ fun Application.setUpMovieRoutes() {
                 val id = ticketRepository.addTicket(body)
                 call.response.status(HttpStatusCode.Created)
                 call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+            }
+            put {
+                val body = call.receive<TicketDto>()
+                body.id?.let {
+                    ticketRepository.updateTicket(it, body)
+                    call.response.status(HttpStatusCode.OK)
+                    call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully updated!", it))
+                    return@put
+                }
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
+            }
+            get("/member/{id}") {
+                val id = call.parameters["id"]
+                id?.let {
+                    val tickets = ticketRepository.getTicketsByMemberId(id.toInt())
+                    call.response.status(HttpStatusCode.Created)
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully logged in!", tickets))
+                }
+                call.response.status(HttpStatusCode.BadRequest)
+                call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
             }
         }
     }
