@@ -10,9 +10,7 @@ data class MovieDto(
     val id: Int? = null,
     val name: String,
     val releaseDate: LocalDate,
-    val director: String,
-    val actors: List<String>,
-    val length: Int,
+    val durationMin: Int,
     val description: String,
     val thumbnailPath: String,
     val contentRatingId: Int

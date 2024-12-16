@@ -6,7 +6,5 @@ import com.gmail.vincent031525.domain.repository.MovieRepository
 
 class MovieRepositoryImpl(private val dataSource: DataSource) : MovieRepository {
     override suspend fun getAllMovies(): List<MovieDto> = dataSource.getAllMovies()
-    override suspend fun addMovie(movieDto: MovieDto) {
-        dataSource.addMovie(movieDto)
-    }
+    override suspend fun addMovie(movieDto: MovieDto): Int = dataSource.addMovie(movieDto)
 }

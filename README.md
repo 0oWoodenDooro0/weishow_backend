@@ -1,44 +1,92 @@
 # weishow_backend
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+# Member [/member]
 
-Here are some useful links to get you started:
+## Add a Member [POST]
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
++ Request (application/json)
+    + Attributes
+        + name: string
+        + email: string
+        + passsword: string
+        + gender: string
++ Response 201 (application/json)
 
-## Features
+# Movie [/movie]
 
-Here's a list of features included in this project:
+## Get all movie [GET]
 
-| Name                                                               | Description                                                                        |
-| --------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Routing](https://start.ktor.io/p/routing)                         | Provides a structured routing DSL                                                  |
-| [HTML DSL](https://start.ktor.io/p/html-dsl)                       | Generates HTML from Kotlin DSL                                                     |
-| [CSS DSL](https://start.ktor.io/p/css-dsl)                         | Generates CSS from Kotlin DSL                                                      |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation) | Provides automatic content conversion according to Content-Type and Accept headers |
-| [Jackson](https://start.ktor.io/p/ktor-jackson)                    | Handles JSON serialization using Jackson library                                   |
-| [Freemarker](https://start.ktor.io/p/freemarker)                   | Serves HTML content using Apache's FreeMarker template engine                      |
++ Response 200 (application/json)
 
-## Building & Running
+## Add a movie [POST]
 
-To build or run the project, use one of the following tasks:
++ Request (application/json)
+    + Attributes
+        + title: string
+        + releaseTime: string (yyyy-mm-dd)
+        + durationMin: int
+        + description: string
+        + thumbnailPath: string
+        + contentRatinId: int
++ Response 201
 
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
+# Screen [/screen]
 
-If the server starts successfully, you'll see the following output:
+## Add a Screen [POST]
 
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
++ Request (application/json)
+    + Attributes
+        + number: int
+        + row: int
+        + column: int
+        + theaterId: int
++ Response 201 (application/json)
 
+# Seat [/seat]
+
+## Add a Seat [POST]
+
++ Request (application/json)
+    + Attributes
+        + row: int
+        + column: int
+        + number: int
++ Response 201 (application/json)
+
+# Session [/session]
+
+## Add a Session [POST]
+
++ Request (application/json)
+    + Attributes
+        + price: int
+        + screenId: int
+        + movieId: int
++ Response 201 (application/json)
+
+# Theater [/theater]
+
+## Add a Theater [POST]
+
++ Request (application/json)
+    + Attributes
+        + name: string
+        + address: string
+        + phoneNumber: string
+        + description: string
++ Response 201 (application/json)
+
+# Ticket [/ticket]
+
+## Add a Ticket [POST]
+
++ Request (application/json)
+    + Attributes
+        + price: int
+        + purchaseTime: string ()
+        + sessionId: int
+        + memberId: int
+        + statusId: int
+        + seatId: int
+        + typeId: int
++ Response 201 (application/json)

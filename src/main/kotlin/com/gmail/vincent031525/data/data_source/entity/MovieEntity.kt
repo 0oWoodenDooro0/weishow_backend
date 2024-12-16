@@ -6,9 +6,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.date
 object MovieEntity : IntIdTable(name = "movie") {
     val name = varchar("name", 50)
     val releaseTime = date("release_time")
-    val director = varchar("director", 50)
-    val actors = varchar("actors", 200)
-    val length = integer("length")
+    val durationMin = integer("duration_min")
     val description = text("description")
     val thumbnailPath = varchar("thumbnail_path", 50)
     val contentRatingId = reference("content_rating_id", ContentRatingEntity.id)

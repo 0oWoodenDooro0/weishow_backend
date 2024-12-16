@@ -10,6 +10,6 @@ class TheaterDao(id: EntityID<Int>) : IntEntity(id) {
 
     var name by TheaterEntity.name
     var address by TheaterEntity.address
-    var phone by TheaterEntity.phoneNumber
+    var phoneNumber by TheaterEntity.phoneNumber
     var description by TheaterEntity.description
 }

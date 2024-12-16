@@ -1,4 +1,3 @@
-
 val kotlinVersion: String by project
 val kotlinxHtmlVersion: String by project
 val logbackVersion: String by project
@@ -35,10 +34,11 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json")
 //    implementation("io.ktor:ktor-server-freemarker-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
+    implementation("io.ktor:ktor-server-status-pages")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml-jvm")
 
-    implementation ("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")

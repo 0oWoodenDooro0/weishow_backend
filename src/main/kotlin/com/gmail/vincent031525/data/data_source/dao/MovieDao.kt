@@ -10,9 +10,7 @@ class MovieDao(id: EntityID<Int>) : IntEntity(id) {
 
     var name by MovieEntity.name
     var releaseTime by MovieEntity.releaseTime
-    var director by MovieEntity.director
-    var actors by MovieEntity.actors
-    var length by MovieEntity.length
+    var duartionMin by MovieEntity.durationMin
     var description by MovieEntity.description
     var thumbnailPath by MovieEntity.thumbnailPath
     var contentRatingId by MovieEntity.contentRatingId
