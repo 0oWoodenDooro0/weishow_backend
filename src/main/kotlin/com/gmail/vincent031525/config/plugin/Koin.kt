@@ -31,22 +31,20 @@ fun Application.configureKoin() {
             singleOf(::TicketRepositoryImpl) { bind<TicketRepository>() }
         })
     }
-    transaction {
-        val database by inject<Database>()
-        transaction(database) {
-            SchemaUtils.createMissingTablesAndColumns(ContentRatingEntity)
-            SchemaUtils.createMissingTablesAndColumns(MovieEntity)
-            SchemaUtils.createMissingTablesAndColumns(TheaterEntity)
-            SchemaUtils.createMissingTablesAndColumns(ManagerEntity)
-            SchemaUtils.createMissingTablesAndColumns(ManagementEntity)
-            SchemaUtils.createMissingTablesAndColumns(ScreenEntity)
-            SchemaUtils.createMissingTablesAndColumns(SessionEntity)
-            SchemaUtils.createMissingTablesAndColumns(MemberEntity)
-            SchemaUtils.createMissingTablesAndColumns(TicketStatusEntity)
-            SchemaUtils.createMissingTablesAndColumns(SeatEntity)
-            SchemaUtils.createMissingTablesAndColumns(TicketTypeEntity)
-            SchemaUtils.createMissingTablesAndColumns(TicketEntity)
-        }
+    val database by inject<Database>()
+    transaction(database) {
+        SchemaUtils.createMissingTablesAndColumns(ContentRatingEntity)
+        SchemaUtils.createMissingTablesAndColumns(MovieEntity)
+        SchemaUtils.createMissingTablesAndColumns(TheaterEntity)
+        SchemaUtils.createMissingTablesAndColumns(ManagerEntity)
+        SchemaUtils.createMissingTablesAndColumns(ManagementEntity)
+        SchemaUtils.createMissingTablesAndColumns(ScreenEntity)
+        SchemaUtils.createMissingTablesAndColumns(SessionEntity)
+        SchemaUtils.createMissingTablesAndColumns(MemberEntity)
+        SchemaUtils.createMissingTablesAndColumns(TicketStatusEntity)
+        SchemaUtils.createMissingTablesAndColumns(SeatEntity)
+        SchemaUtils.createMissingTablesAndColumns(TicketTypeEntity)
+        SchemaUtils.createMissingTablesAndColumns(TicketEntity)
     }
 }
 
