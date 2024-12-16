@@ -1,10 +1,8 @@
 package com.gmail.vincent031525.data.data_source.entity
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 
-object ManagerEntity : Table(name = "manager") {
-    val id = integer("id").autoIncrement()
+object ManagerEntity : IntIdTable(name = "manager") {
     var username = varchar("username", 50)
     var password = varchar("password", 50)
-    override val primaryKey = PrimaryKey(id)
 }

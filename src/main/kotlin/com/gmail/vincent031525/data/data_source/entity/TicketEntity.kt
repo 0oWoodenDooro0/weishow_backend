@@ -1,10 +1,9 @@
 package com.gmail.vincent031525.data.data_source.entity
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
-object TicketEntity : Table(name = "ticket") {
-    val id = integer("id").autoIncrement()
+object TicketEntity : IntIdTable(name = "ticket") {
     val price = integer("price")
     val purchaseTime = datetime("purchase_time")
     val sessionId = reference("session_id", SessionEntity.id)

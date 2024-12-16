@@ -1,11 +1,12 @@
 package com.gmail.vincent031525.data.data_source
 
+import com.gmail.vincent031525.data.data_source.dao.MovieDao
 import com.gmail.vincent031525.data.data_source.entity.*
 import com.gmail.vincent031525.domain.model.MovieDto
 import kotlinx.coroutines.Dispatchers
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -33,15 +34,15 @@ class DataSource(database: Database) {
     }
 
     suspend fun addMovie(movieDto: MovieDto) = query {
-        MovieEntity.insert {
-            it[name] = movieDto.name
-            it[releaseTime] = movieDto.releaseDate
-            it[director] = movieDto.director
-            it[actors] = movieDto.actors.joinToString()
-            it[length] = movieDto.length
-            it[description] = movieDto.description
-            it[thumbnailPath] = movieDto.thumbnailPath
-            it[contentRatingId] = movieDto.contentRatingId
+        MovieDao.new {
+            name = movieDto.name
+            releaseTime = movieDto.releaseDate
+            director = movieDto.director
+            actors = movieDto.actors.joinToString()
+            length = movieDto.length
+            description = movieDto.description
+            thumbnailPath = movieDto.thumbnailPath
+            contentRatingId = EntityID(movieDto.contentRatingId, ContentRatingEntity)
         }
     }
 }

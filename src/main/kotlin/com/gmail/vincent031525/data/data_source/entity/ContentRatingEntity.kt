@@ -1,9 +1,7 @@
 package com.gmail.vincent031525.data.data_source.entity
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 
-object ContentRatingEntity : Table(name = "content_rating") {
-    val id = integer("id").autoIncrement()
+object ContentRatingEntity : IntIdTable(name = "content_rating") {
     val name = varchar("name", 50)
-    override val primaryKey = PrimaryKey(id)
 }
