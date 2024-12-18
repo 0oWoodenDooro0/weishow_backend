@@ -37,6 +37,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml-jvm")
+    implementation("io.ktor:ktor-server-auth")
 
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")

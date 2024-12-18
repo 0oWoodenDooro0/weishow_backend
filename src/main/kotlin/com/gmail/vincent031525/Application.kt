@@ -1,5 +1,6 @@
 package com.gmail.vincent031525
 
+import com.gmail.vincent031525.config.plugin.configureAuthentication
 import com.gmail.vincent031525.config.plugin.configureKoin
 import com.gmail.vincent031525.config.plugin.configureSerialization
 import com.gmail.vincent031525.rest.setUpMovieRoutes
@@ -10,6 +11,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    configureAuthentication()
     configureSerialization()
     configureKoin()
     setUpMovieRoutes()
