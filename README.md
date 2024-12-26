@@ -22,6 +22,10 @@
 
 # Member [/member]
 
+## Get all Members [GET]
+
++ Response 200 (application/json)
+
 ## Add a Member [POST]
 
 + Request (application/json)
@@ -29,7 +33,6 @@
         + name: string
         + email: string
         + passsword: string
-        + gender: string
 + Response 201 (application/json)
 
 ## Update a Member [PUT]
@@ -40,7 +43,6 @@
         + name: string
         + email: string
         + passsword: string
-        + gender: string
 + Response 200 (application/json)
 
 ## Get a Member By Email And Password [POST /login]

@@ -6,5 +6,5 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 
 interface ManagementRepository {
     suspend fun <T> query(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
-    suspend fun addManagement(managementDto: ManagementDto): Int
+    suspend fun addManagement(managementDto: ManagementDto): Result<Int>
 }

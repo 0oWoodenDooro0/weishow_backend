@@ -1,6 +1,8 @@
 package com.gmail.vincent031525.rest
 
 import com.gmail.vincent031525.domain.model.*
+import com.gmail.vincent031525.domain.model.request.LoginRequest
+import com.gmail.vincent031525.domain.model.response.DataResponse
 import com.gmail.vincent031525.domain.repository.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -20,8 +22,9 @@ fun Application.setUpMovieRoutes() {
     val sessionRepository by inject<SessionRepository>()
     val theaterRepository by inject<TheaterRepository>()
     val ticketRepository by inject<TicketRepository>()
+
     routing {
-        authenticate {
+        authenticate("auth-bearer") {
             route("/management") {
                 post {
                     val body = call.receive<ManagementDto>()
@@ -39,6 +42,13 @@ fun Application.setUpMovieRoutes() {
                 }
             }
             route("/member") {
+                get {
+                    val result = memberRepository.getAllMembers()
+                    result.onSuccess {
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
+                    }
+                }
                 post {
                     val body = call.receive<MemberDto>()
                     val id = memberRepository.addMember(body)
@@ -54,13 +64,18 @@ fun Application.setUpMovieRoutes() {
                         return@put
                     }
                     call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
+                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing field id", null))
                 }
                 post("/login") {
                     val body = call.receive<LoginRequest>()
-                    val memberDto = memberRepository.getMemberByEmailAndPassword(body)
-                    call.response.status(HttpStatusCode.OK)
-                    call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully logged in!", memberDto))
+                    val response = memberRepository.getMemberByEmailAndPassword(body)
+                    response.onSuccess { data ->
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully logged in!", data))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Wrong email or password!", null))
+                    }
                 }
             }
             route("/movie") {

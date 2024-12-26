@@ -35,6 +35,8 @@ dependencies {
 //    implementation("io.ktor:ktor-server-freemarker-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-status-pages")
+    implementation("io.ktor:ktor-server-request-validation")
+    implementation("io.ktor:ktor-server-cors")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("io.ktor:ktor-server-config-yaml-jvm")
     implementation("io.ktor:ktor-server-auth")

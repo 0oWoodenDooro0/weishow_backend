@@ -1,4 +1,4 @@
-package com.gmail.vincent031525.domain.model
+package com.gmail.vincent031525.domain.model.response
 
 import kotlinx.serialization.Serializable
 

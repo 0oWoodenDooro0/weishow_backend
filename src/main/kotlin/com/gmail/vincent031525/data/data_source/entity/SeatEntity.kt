@@ -6,4 +6,8 @@ object SeatEntity : IntIdTable(name = "seat") {
     val row = integer("row")
     val column = integer("column")
     val number = varchar("number", 50)
+
+    init {
+        uniqueIndex(row, column)
+    }
 }

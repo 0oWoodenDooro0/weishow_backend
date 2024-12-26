@@ -7,10 +7,12 @@ import com.gmail.vincent031525.domain.repository.ManagementRepository
 import org.jetbrains.exposed.dao.id.EntityID
 
 class ManagementRepositoryImpl : ManagementRepository {
-    override suspend fun addManagement(managementDto: ManagementDto): Int = query {
+    override suspend fun addManagement(managementDto: ManagementDto): Result<Int> = query {
         ManagementDao.new {
             managerId = EntityID(managementDto.managerId, ManagementEntity)
             theaterId = EntityID(managementDto.theaterId, ManagementEntity)
-        }.id.value
+        }.id.let {
+            Result.success(it.value)
+        }
     }
 }

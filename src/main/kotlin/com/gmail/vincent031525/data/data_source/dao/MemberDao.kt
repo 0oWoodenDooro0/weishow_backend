@@ -11,5 +11,4 @@ class MemberDao(id: EntityID<Int>) : IntEntity(id) {
     var name by MemberEntity.name
     var email by MemberEntity.email
     var password by MemberEntity.password
-    var gender by MemberEntity.gender
 }

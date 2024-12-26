@@ -5,7 +5,7 @@ import io.ktor.server.auth.*
 
 fun Application.configureAuthentication() {
     install(Authentication) {
-        bearer {
+        bearer("auth-bearer") {
             realm = "Access to the '/' path"
             authenticate { tokenCredential ->
                 if (tokenCredential.token == "a974f9b8a917f49dd75168ff85072644") {
