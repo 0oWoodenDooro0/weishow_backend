@@ -1,7 +1,7 @@
 package com.gmail.vincent031525.rest
 
 import com.gmail.vincent031525.domain.model.*
-import com.gmail.vincent031525.domain.model.request.LoginRequest
+import com.gmail.vincent031525.domain.model.request.*
 import com.gmail.vincent031525.domain.model.response.DataResponse
 import com.gmail.vincent031525.domain.repository.*
 import io.ktor.http.*
@@ -30,7 +30,7 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<ManagementDto>()
                     val id = managementRepository.addManagement(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                 }
             }
             route("/manager") {
@@ -38,7 +38,7 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<ManagerDto>()
                     val id = managerRepository.addManager(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                 }
             }
             route("/member") {
@@ -49,53 +49,95 @@ fun Application.setUpMovieRoutes() {
                         call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
                     }
                 }
-                post {
-                    val body = call.receive<MemberDto>()
-                    val id = memberRepository.addMember(body)
-                    call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
-                }
-                put {
-                    val body = call.receive<MemberDto>()
-                    body.id?.let {
-                        memberRepository.updateMember(it, body)
-                        call.response.status(HttpStatusCode.OK)
-                        call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully added!", it))
-                        return@put
+                put("/{id}") {
+                    val id = call.parameters["id"]
+                    id?.let {
+                        val body = call.receive<UpdateMemberRequest>()
+                        val response = memberRepository.updateMember(it.toInt(), body)
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure {
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                        }
                     }
                     call.response.status(HttpStatusCode.BadRequest)
                     call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing field id", null))
                 }
-                post("/login") {
-                    val body = call.receive<LoginRequest>()
-                    val response = memberRepository.getMemberByEmailAndPassword(body)
-                    response.onSuccess { data ->
-                        call.response.status(HttpStatusCode.OK)
-                        call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully logged in!", data))
+                post("/register") {
+                    val body = call.receive<RegisterRequest>()
+                    val response = memberRepository.register(body)
+                    response.onSuccess { id ->
+                        call.response.status(HttpStatusCode.Created)
+                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                     }.onFailure {
                         call.response.status(HttpStatusCode.BadRequest)
-                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Wrong email or password!", null))
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                    }
+                }
+                post("/login") {
+                    val body = call.receive<LoginRequest>()
+                    val response = memberRepository.login(body)
+                    response.onSuccess { data ->
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", data))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
                     }
                 }
             }
             route("/movie") {
                 get {
-                    call.response.status(HttpStatusCode.OK)
-                    call.respond(DataResponse(HttpStatusCode.OK.value, "success", movieRepository.getAllMovies()))
+                    val response = movieRepository.getAllMovies()
+                    response.onSuccess {
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                    }
                 }
                 post {
-                    val body = call.receive<MovieDto>()
-                    val id = movieRepository.addMovie(body)
-                    call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    val body = call.receive<AddMovieRequest>()
+                    val result = movieRepository.addMovie(body)
+                    result.onSuccess { id ->
+                        call.response.status(HttpStatusCode.Created)
+                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                    }
                 }
-                put {
-                    val body = call.receive<MovieDto>()
-                    body.id?.let {
-                        movieRepository.updateMovie(it, body)
-                        call.response.status(HttpStatusCode.OK)
-                        call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully added!", it))
+                put("/{id}") {
+                    val id = call.parameters["id"]
+                    val body = call.receive<UpdateMovieRequest>()
+                    id?.let {
+                        val response = movieRepository.updateMovie(it.toInt(), body)
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
                         return@put
+                    }
+                    call.response.status(HttpStatusCode.BadRequest)
+                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
+                }
+                delete("/{id}") {
+                    val id = call.parameters["id"]
+                    id?.let {
+                        val response = movieRepository.deleteMovie(it.toInt())
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
                     }
                     call.response.status(HttpStatusCode.BadRequest)
                     call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
@@ -106,7 +148,7 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<ScreenDto>()
                     val id = screenRepository.addScreen(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                 }
             }
             route("/seat") {
@@ -114,7 +156,7 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<SeatDto>()
                     val id = seatRepository.addSeat(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "succes", id))
                 }
             }
             route("/session") {
@@ -122,7 +164,17 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<SessionDto>()
                     val id = sessionRepository.addSession(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
+                }
+                get("/movie/{id}") {
+                    val movieId = call.parameters["id"]
+                    movieId?.let {
+                        val response = sessionRepository.getSessionByMovieId(it.toInt())
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", response))
+                    }
+                    call.response.status(HttpStatusCode.BadRequest)
+                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
             }
             route("/theater") {
@@ -130,7 +182,7 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<TheaterDto>()
                     val id = theaterRepository.addTheater(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                 }
             }
             route("/ticket") {
@@ -138,14 +190,14 @@ fun Application.setUpMovieRoutes() {
                     val body = call.receive<TicketDto>()
                     val id = ticketRepository.addTicket(body)
                     call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully added!", id))
+                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
                 }
                 put {
                     val body = call.receive<TicketDto>()
                     body.id?.let {
                         ticketRepository.updateTicket(it, body)
                         call.response.status(HttpStatusCode.OK)
-                        call.respond(DataResponse(HttpStatusCode.OK.value, "Successfully updated!", it))
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
                         return@put
                     }
                     call.response.status(HttpStatusCode.BadRequest)
@@ -156,7 +208,7 @@ fun Application.setUpMovieRoutes() {
                     id?.let {
                         val tickets = ticketRepository.getTicketsByMemberId(id.toInt())
                         call.response.status(HttpStatusCode.Created)
-                        call.respond(DataResponse(HttpStatusCode.Created.value, "Successfully logged in!", tickets))
+                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", tickets))
                     }
                     call.response.status(HttpStatusCode.BadRequest)
                     call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))

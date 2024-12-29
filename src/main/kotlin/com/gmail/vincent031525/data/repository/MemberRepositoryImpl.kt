@@ -4,53 +4,66 @@ import com.gmail.vincent031525.data.data_source.dao.MemberDao
 import com.gmail.vincent031525.data.data_source.entity.MemberEntity
 import com.gmail.vincent031525.domain.model.MemberDto
 import com.gmail.vincent031525.domain.model.request.LoginRequest
+import com.gmail.vincent031525.domain.model.request.RegisterRequest
+import com.gmail.vincent031525.domain.model.request.UpdateMemberRequest
 import com.gmail.vincent031525.domain.model.response.LoginResponse
 import com.gmail.vincent031525.domain.repository.MemberRepository
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 
 class MemberRepositoryImpl : MemberRepository {
-    override suspend fun getAllMembers(): Result<List<MemberDto>> = query {
-        Result.success(
-            MemberDao.all().map {
-                MemberDto(
-                    it.id.value,
-                    it.name,
-                    it.email,
-                    it.password
-                )
-            }
-        )
-    }
-
-    override suspend fun addMember(memberDto: MemberDto): Int = query {
-        MemberDao.new {
-            name = memberDto.name
-            email = memberDto.email
-            password = memberDto.password
-        }.id.value
-    }
-
-    override suspend fun updateMember(id: Int, memberDto: MemberDto) {
+    override suspend fun getAllMembers(): Result<List<MemberDto>> = try {
         query {
-            MemberDao.findByIdAndUpdate(id) {
-                it.name = memberDto.name
-                it.email = memberDto.email
-                it.password = memberDto.password
+            val members = MemberDao.all().map {
+                MemberDto(
+                    it.id.value, it.name, it.email, it.password
+                )
             }
+            Result.success(members)
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
-    override suspend fun getMemberByEmailAndPassword(loginRequest: LoginRequest): Result<LoginResponse> = query {
-        MemberDao.find((MemberEntity.email eq loginRequest.email) and (MemberEntity.password eq loginRequest.password))
-            .map {
-                Result.success(
-                    LoginResponse(
-                        id = it.id.value,
-                        name = it.name,
-                        email = it.email
-                    )
-                )
-            }.singleOrNull() ?: Result.failure(Exception("Login not found."))
+    override suspend fun updateMember(id: Int, updateMemberRequest: UpdateMemberRequest): Result<Int> = try {
+        query {
+            MemberDao.findByIdAndUpdate(id) { member ->
+                updateMemberRequest.email?.let { member.email = it }
+                updateMemberRequest.name?.let { member.name = it }
+                updateMemberRequest.password?.let { member.password = it }
+            }
+            Result.success(id)
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+
+    override suspend fun register(registerRequest: RegisterRequest): Result<Int> = try {
+        query {
+            val id = MemberDao.new {
+                name = registerRequest.name
+                email = registerRequest.email
+                password = registerRequest.password
+            }.id.value
+            Result.success(id)
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    override suspend fun login(loginRequest: LoginRequest): Result<LoginResponse> = try {
+        query {
+            val result =
+                MemberDao.find((MemberEntity.email eq loginRequest.email) and (MemberEntity.password eq loginRequest.password))
+                    .map {
+                        LoginResponse(
+                            id = it.id.value, name = it.name, email = it.email
+                        )
+                    }.single()
+            Result.success(result)
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 }

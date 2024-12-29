@@ -9,9 +9,10 @@ class MovieDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<MovieDao>(MovieEntity)
 
     var name by MovieEntity.name
-    var releaseTime by MovieEntity.releaseTime
+    var releaseTime by MovieEntity.releaseDate
     var durationMin by MovieEntity.durationMin
     var description by MovieEntity.description
     var thumbnailPath by MovieEntity.thumbnailPath
     var contentRatingId by MovieEntity.contentRatingId
+    var removed by MovieEntity.removed
 }

@@ -12,6 +12,7 @@ class TicketRepositoryImpl : TicketRepository {
         TicketDao.new {
             price = ticketDto.price
             purchaseTime = ticketDto.purchseTime
+            date = ticketDto.date
             sessionId = EntityID(ticketDto.sessionId, SessionEntity)
             memberId = EntityID(ticketDto.memberId, MemberEntity)
             statusId = EntityID(ticketDto.statusId, TicketStatusEntity)
@@ -24,6 +25,7 @@ class TicketRepositoryImpl : TicketRepository {
             TicketDao.findByIdAndUpdate(id) {
                 it.price = ticketDto.price
                 it.purchaseTime = ticketDto.purchseTime
+                it.date = ticketDto.date
                 it.sessionId = EntityID(ticketDto.sessionId, SessionEntity)
                 it.memberId = EntityID(ticketDto.memberId, MemberEntity)
                 it.statusId = EntityID(ticketDto.statusId, TicketStatusEntity)
@@ -38,6 +40,7 @@ class TicketRepositoryImpl : TicketRepository {
                 id = it.id.value,
                 price = it.price,
                 purchseTime = it.purchaseTime,
+                date = it.date,
                 sessionId = it.sessionId.value,
                 memberId = it.memberId.value,
                 statusId = it.statusId.value,

@@ -7,4 +7,5 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 interface SessionRepository {
     suspend fun <T> query(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
     suspend fun addSession(sessionDto: SessionDto): Int
+    suspend fun getSessionByMovieId(movieId: Int): List<SessionDto>
 }

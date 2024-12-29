@@ -26,7 +26,16 @@
 
 + Response 200 (application/json)
 
-## Add a Member [POST]
+## Update a Member [PUT /{id}]
+
++ Request (application/json)
+    + Attributes
+        + name: string
+        + email: string
+        + passsword: string
++ Response 200 (application/json)
+
+## Register [POST]
 
 + Request (application/json)
     + Attributes
@@ -34,18 +43,8 @@
         + email: string
         + passsword: string
 + Response 201 (application/json)
-
-## Update a Member [PUT]
-
-+ Request (application/json)
-    + Attributes
-        + id: int
-        + name: string
-        + email: string
-        + passsword: string
-+ Response 200 (application/json)
-
-## Get a Member By Email And Password [POST /login]
+ 
+## Login [POST /login]
 
 + Request (application/json)
     + Attributes
@@ -71,17 +70,20 @@
         + contentRatinId: int
 + Response 201 (application/json)
 
-## Update a Movie [POST]
+## Update a Movie [PUT /{id}]
 
 + Request (application/json)
     + Attributes
-        + id: int
         + title: string
         + releaseTime: string (yyyy-mm-dd)
         + durationMin: int
         + description: string
         + thumbnailPath: string
         + contentRatinId: int
++ Response 200 (application/json)
+
+## Delete a Movie [DELETE /{id}]
+
 + Response 200 (application/json)
 
 # Screen [/screen]

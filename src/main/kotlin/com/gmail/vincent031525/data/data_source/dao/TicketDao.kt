@@ -10,6 +10,7 @@ class TicketDao(id: EntityID<Int>) : IntEntity(id) {
 
     var price by TicketEntity.price
     var purchaseTime by TicketEntity.purchaseTime
+    var date by TicketEntity.date
     var sessionId by TicketEntity.sessionId
     var memberId by TicketEntity.memberId
     var statusId by TicketEntity.statusId
