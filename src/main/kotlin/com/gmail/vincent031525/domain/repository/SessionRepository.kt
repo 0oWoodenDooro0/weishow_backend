@@ -8,4 +8,5 @@ interface SessionRepository {
     suspend fun <T> query(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
     suspend fun addSession(sessionDto: SessionDto): Int
     suspend fun getSessionByMovieId(movieId: Int): List<SessionDto>
+    suspend fun getSessionByTheaterIdAndMovieId(theaterId :Int, movieId: Int): Result<List<SessionDto>>
 }

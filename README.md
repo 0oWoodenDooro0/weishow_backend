@@ -20,6 +20,14 @@
         + passsword: string
 + Response 201 (application/json)
 
+## Login [POST]
+
++ Request (application/json)
+    + Attributes
+        + username: string
+        + passsword: string
++ Response 200 (application/json)
+
 # Member [/member]
 
 ## Get all Members [GET]
@@ -43,13 +51,17 @@
         + email: string
         + passsword: string
 + Response 201 (application/json)
- 
+
 ## Login [POST /login]
 
 + Request (application/json)
     + Attributes
         + email: string
         + passsword: string
++ Response 200 (application/json)
+
+## Delete a Member [DELETE /{id}]
+
 + Response 200 (application/json)
 
 # Movie [/movie]
@@ -120,7 +132,19 @@
         + movieId: int
 + Response 201 (application/json)
 
+## Get Session By TheaterId and MovieId [POST /theater/{id}/movie/{id}]
+
++ Response 200 (application/json)
+
 # Theater [/theater]
+
+## Get all Theater [GET]
+
++ Response 200 (application/json)
+
+## Get Theater By ManagerId [GET /manager/{id}]
+
++ Response 200 (application/json)
 
 ## Add a Theater [POST]
 

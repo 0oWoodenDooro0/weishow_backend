@@ -3,7 +3,7 @@ package com.gmail.vincent031525.data.repository
 import com.gmail.vincent031525.data.data_source.dao.MemberDao
 import com.gmail.vincent031525.data.data_source.entity.MemberEntity
 import com.gmail.vincent031525.domain.model.MemberDto
-import com.gmail.vincent031525.domain.model.request.LoginRequest
+import com.gmail.vincent031525.domain.model.request.MemberLoginRequest
 import com.gmail.vincent031525.domain.model.request.RegisterRequest
 import com.gmail.vincent031525.domain.model.request.UpdateMemberRequest
 import com.gmail.vincent031525.domain.model.response.LoginResponse
@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.and
 class MemberRepositoryImpl : MemberRepository {
     override suspend fun getAllMembers(): Result<List<MemberDto>> = try {
         query {
-            val members = MemberDao.all().map {
+            val members = MemberDao.find(MemberEntity.removed eq false).map {
                 MemberDto(
                     it.id.value, it.name, it.email, it.password
                 )
@@ -38,6 +38,17 @@ class MemberRepositoryImpl : MemberRepository {
         Result.failure(e)
     }
 
+    override suspend fun deleteMember(id: Int): Result<Int> = try {
+        query {
+            MemberDao.findByIdAndUpdate(id) { member ->
+                member.removed = true
+            }
+            Result.success(id)
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
 
     override suspend fun register(registerRequest: RegisterRequest): Result<Int> = try {
         query {
@@ -52,15 +63,11 @@ class MemberRepositoryImpl : MemberRepository {
         Result.failure(e)
     }
 
-    override suspend fun login(loginRequest: LoginRequest): Result<LoginResponse> = try {
+    override suspend fun login(loginRequest: MemberLoginRequest): Result<LoginResponse> = try {
         query {
             val result =
                 MemberDao.find((MemberEntity.email eq loginRequest.email) and (MemberEntity.password eq loginRequest.password))
-                    .map {
-                        LoginResponse(
-                            id = it.id.value, name = it.name, email = it.email
-                        )
-                    }.single()
+                    .map { LoginResponse(id = it.id.value, name = it.name, email = it.email) }.single()
             Result.success(result)
         }
     } catch (e: Exception) {
