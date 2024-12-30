@@ -12,7 +12,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Application.setUpMovieRoutes() {
+fun Application.setBackendRoutes() {
     val managementRepository by inject<ManagementRepository>()
     val managerRepository by inject<ManagerRepository>()
     val memberRepository by inject<MemberRepository>()

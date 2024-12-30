@@ -1,7 +1,8 @@
 package com.gmail.vincent031525
 
 import com.gmail.vincent031525.config.plugin.*
-import com.gmail.vincent031525.rest.setUpMovieRoutes
+import com.gmail.vincent031525.rest.setBackendRoutes
+import com.gmail.vincent031525.rest.setFrontendRoutes
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -15,5 +16,6 @@ fun Application.module() {
     configureRequestValidation()
     configureStatusPage()
     configureCors()
-    setUpMovieRoutes()
+    setFrontendRoutes()
+    setBackendRoutes()
 }

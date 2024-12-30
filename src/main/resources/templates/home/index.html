@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket System</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="layout">
+    <!-- 側邊欄 -->
+    <aside class="sidebar">
+        <h1 class="logo">萎鏽電影</h1>
+        <ul>
+            <li>
+                <button onclick="navigateTo('Booking')">訂票</button>
+            </li>
+            <li>
+                <button onclick="navigateTo('Introducing')">電影介紹</button>
+            </li>
+            <li>
+                <button onclick="navigateTo('schedule')">電影時刻查詢</button>
+            </li>
+            <li>
+                <button onclick="navigateTo('membership')">會員查詢</button>
+            </li>
+            <li>
+                <button onclick="navigateTo('login')">登入</button>
+            </li>
+            <li>
+                <button onclick="navigateTo('register')">註冊</button>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 內容區域 -->
+    <main class="content">
+        <!-- 訂票 -->
+        <div id="Booking" class="page">
+            <h2>訂票</h2>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="location">
+                        <i class="fas fa-map-marker-alt"></i> 請選擇影城
+                    </label>
+                    <select id="location" required>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="movie">
+                        <i class="fas fa-film"></i> 請選擇影片
+                    </label>
+                    <select id="movie" required>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">
+                        <i class="fas fa-calendar-alt"></i> 請選擇日期
+                    </label>
+                    <input type="date" id="date" required/>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">
+                        <i class="fas fa-clock"></i> 請選擇場次
+                    </label>
+                    <select id="time" required>
+                        <option value="">請選擇場次</option>
+                    </select>
+                </div>
+                <div id="seating" class="seating">
+                    <h3>選擇座位</h3>
+                    <div class="screen">銀幕位置</div>
+                    <div class="seat-map">
+                    </div>
+                    <button type="button" onclick="confirmSeats()">確認座位</button>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" onclick="goToBooking()">前往訂票</button>
+                </div>
+            </form>
+        </div>
+        <!-- 電影介紹 -->
+        <div id="Introducing" class="page active">
+            <div id="movies" class="movies"></div>
+        </div><!-- 登入表單 -->
+        <div id="login" class="page">
+            <h1>登入</h1>
+            <form id="loginForm">
+                <label for="loginEmail">電子信箱：</label>
+                <input type="email" id="loginEmail" required><br>
+                <label for="loginPassword">密碼：</label>
+                <input type="password" id="loginPassword" required><br>
+                <button type="submit">登入</button>
+            </form>
+            <p id="loginMessage"></p>
+        </div>
+        <!-- 註冊表單 -->
+        <div id="register" class="page">
+            <h1>註冊</h1>
+            <form id="registerForm">
+                <label for="registerUsername">用戶名：</label>
+                <input type="text" id="registerUsername" required><br>
+                <label for="registerEmail">電子信箱：</label>
+                <input type="email" id="registerEmail" required><br>
+                <label for="registerPassword">密碼：</label>
+                <input type="password" id="registerPassword" required><br>
+                <label for="confirmPassword">確認密碼：</label>
+                <input type="password" id="confirmPassword" required><br>
+                <button type="submit">註冊</button>
+            </form>
+            <p id="registerMessage"></p>
+        </div>
+    </main>
+</div>
+
+<script src="./script.js"></script>
+</body>
+</html>

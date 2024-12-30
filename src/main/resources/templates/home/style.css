@@ -1,0 +1,247 @@
+/* 基本布局 */
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* 左上角 LOGO */
+.logo {
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* 側邊欄 */
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.sidebar button:hover {
+    background-color: #555;
+}
+
+/* 內容區域 */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 隱藏與顯示頁面 */
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* 電影縮圖列表 */
+.movies {
+    display: grid;                   /* 使用 Grid 布局 */
+    grid-template-columns: repeat(4, 1fr); /* 每行 4 個縮圖，等寬 */
+    gap: 20px;                       /* 卡片之間的間距 */
+    justify-items: center;           /* 水平置中對齊 */
+    margin-bottom: 20px;
+}
+
+/* 電影卡片 */
+.movie-card {
+    width: 200px;                    /* 縮圖固定寬度 */
+    overflow: hidden;                /* 隱藏超出部分 */
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.movie-card img {
+    width: 100%;                     /* 讓圖片寬度填滿卡片 */
+    height: 300px;                   /* 固定高度，保證大小一致 */
+    object-fit: cover;               /* 保持圖片比例並填滿卡片 */
+}
+
+/* 滑鼠懸停效果 */
+.movie-card:hover {
+    transform: scale(1.1);           /* 放大效果 */
+    border-color: #6c63ff;           /* 加高亮邊框 */
+}
+
+/* 搜尋欄 */
+.search-bar {
+    margin: 20px;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 搜尋結果高亮 */
+.movie-card.highlight {
+    background-color: #f0f8ff;
+    border-color: #6c63ff;
+}
+
+
+/* 訂票頁面 */
+.quick-booking {
+    background-color: #1a73e8; /* 深藍背景色 */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: auto;
+    text-align: left;
+}
+
+.quick-booking h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+label i {
+    margin-right: 8px;
+}
+
+select,
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.seating {
+    margin-top: 20px; /* 與其他表單元素保持間距 */
+    text-align: center; /* 居中對齊 */
+    padding: 10px; /* 添加內邊距 */
+    border: 1px solid #ccc; /* 添加邊框，使其區分 */
+    border-radius: 10px; /* 圓角設計 */
+    background-color: #f9f9f9; /* 淺灰色背景 */
+}
+
+.screen {
+    background-color: #ccc; /* 銀幕的灰色背景 */
+    padding: 10px;
+    margin-bottom: 20px; /* 與座位區保持間距 */
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) 0.5fr repeat(6, 1fr) 0.5fr repeat(2, 1fr);
+    gap: 10px; /* 座位間距 */
+    justify-content: center; /* 居中對齊 */
+    padding: 10px; /* 添加內邊距 */
+    gap : 20px 10px;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    background-color: #1a73e8; /* 藍色座位 */
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.seat.occupied {
+    background-color: #d9534f; /* 已佔用座位為紅色 */
+    cursor: not-allowed;
+}
+
+.seat.selected {
+    background-color: #5cb85c; /* 選中的座位為綠色 */
+}
+
+
+button {
+    margin-top: 20px; /* 與座位圖保持距離 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 48%;
+    text-align: center;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
