@@ -10,15 +10,15 @@ Kotlin 2.1 w/ Java 21 for building + running the application:
 
 If you don't use AppEngine to run the application, please remove dependency in your project.
 
-`build.gradle.kts`
-```kotlin
+```kotlin 
+// build.gradle.kts
 implementation("com.google.cloud.sql:postgres-socket-factory:1.21.0")
 ```
 
 Then change your database url to your own.
 
-`config/plugin/Koin.kt`
 ```kotlin
+// Koin.kt
 fun provideDatabase(): Database {
     val url = "your_url" 
     return Database.connect(
