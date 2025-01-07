@@ -1,0 +1,2 @@
+runtime: java21
+entrypoint: 'java -jar weishow_backend-all.jar'

@@ -5,8 +5,8 @@ import org.jetbrains.exposed.sql.kotlin.datetime.time
 
 object SessionEntity : IntIdTable(name = "session") {
     val start_time = time("start_time")
-    val price = integer("price")
     val screenId = reference("screen_id", ScreenEntity.id)
     val movieId = reference("movie_id", MovieEntity.id)
+    val removed = bool("removed").default(false)
 }
 

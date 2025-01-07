@@ -66,7 +66,7 @@ class MemberRepositoryImpl : MemberRepository {
     override suspend fun login(loginRequest: MemberLoginRequest): Result<LoginResponse> = try {
         query {
             val result =
-                MemberDao.find((MemberEntity.email eq loginRequest.email) and (MemberEntity.password eq loginRequest.password))
+                MemberDao.find((MemberEntity.email eq loginRequest.email) and (MemberEntity.password eq loginRequest.password) and (MemberEntity.removed eq false))
                     .map { LoginResponse(id = it.id.value, name = it.name, email = it.email) }.single()
             Result.success(result)
         }

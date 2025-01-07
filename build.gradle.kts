@@ -1,3 +1,5 @@
+import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
+
 val kotlinVersion: String by project
 val kotlinxHtmlVersion: String by project
 val logbackVersion: String by project
@@ -8,6 +10,8 @@ plugins {
     kotlin("jvm") version "2.1.0"
     id("io.ktor.plugin") version "3.0.2"
     kotlin("plugin.serialization") version "2.1.0"
+    id("com.gradleup.shadow") version "8.3.1"
+    id("com.google.cloud.tools.appengine") version "2.8.0"
 }
 
 group = "com.gmail.vincent031525"
@@ -23,6 +27,18 @@ application {
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers") }
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("build/libs/${project.name}-all.jar")
+    }
+    deploy {
+        version = "GCLOUD_CONFIG"
+        projectId = "GCLOUD_CONFIG"
+        stopPreviousVersion = true
+        promote = true
+    }
 }
 
 dependencies {
@@ -46,6 +62,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
+
+    implementation("com.google.cloud.sql:postgres-socket-factory:1.21.0")
 
     implementation(project.dependencies.platform("io.insert-koin:koin-bom:$koinVersion"))
     implementation("io.insert-koin:koin-core")

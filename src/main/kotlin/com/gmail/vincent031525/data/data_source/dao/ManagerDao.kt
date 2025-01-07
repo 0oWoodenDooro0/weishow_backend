@@ -10,4 +10,5 @@ class ManagerDao(id: EntityID<Int>) : IntEntity(id) {
 
     var username by ManagerEntity.username
     var password by ManagerEntity.password
+    var isAdmin by ManagerEntity.isAdmin
 }

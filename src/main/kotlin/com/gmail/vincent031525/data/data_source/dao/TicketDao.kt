@@ -15,5 +15,5 @@ class TicketDao(id: EntityID<Int>) : IntEntity(id) {
     var memberId by TicketEntity.memberId
     var statusId by TicketEntity.statusId
     var seatId by TicketEntity.seatId
-    var typeId by TicketEntity.typeId
+    var removed by TicketEntity.removed
 }

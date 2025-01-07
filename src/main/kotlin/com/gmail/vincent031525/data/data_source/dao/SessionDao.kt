@@ -9,7 +9,7 @@ class SessionDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<SessionDao>(SessionEntity)
 
     var startTime by SessionEntity.start_time
-    var price by SessionEntity.price
     var screenId by SessionEntity.screenId
     var movieId by SessionEntity.movieId
+    var removed by SessionEntity.removed
 }

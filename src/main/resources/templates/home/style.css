@@ -70,17 +70,17 @@
 
 /* 電影縮圖列表 */
 .movies {
-    display: grid;                   /* 使用 Grid 布局 */
+    display: grid; /* 使用 Grid 布局 */
     grid-template-columns: repeat(4, 1fr); /* 每行 4 個縮圖，等寬 */
-    gap: 20px;                       /* 卡片之間的間距 */
-    justify-items: center;           /* 水平置中對齊 */
+    gap: 20px; /* 卡片之間的間距 */
+    justify-items: center; /* 水平置中對齊 */
     margin-bottom: 20px;
 }
 
 /* 電影卡片 */
 .movie-card {
-    width: 200px;                    /* 縮圖固定寬度 */
-    overflow: hidden;                /* 隱藏超出部分 */
+    width: 200px; /* 縮圖固定寬度 */
+    overflow: hidden; /* 隱藏超出部分 */
     border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
@@ -88,15 +88,15 @@
 }
 
 .movie-card img {
-    width: 100%;                     /* 讓圖片寬度填滿卡片 */
-    height: 300px;                   /* 固定高度，保證大小一致 */
-    object-fit: cover;               /* 保持圖片比例並填滿卡片 */
+    width: 100%; /* 讓圖片寬度填滿卡片 */
+    height: 300px; /* 固定高度，保證大小一致 */
+    object-fit: cover; /* 保持圖片比例並填滿卡片 */
 }
 
 /* 滑鼠懸停效果 */
 .movie-card:hover {
-    transform: scale(1.1);           /* 放大效果 */
-    border-color: #6c63ff;           /* 加高亮邊框 */
+    transform: scale(1.1); /* 放大效果 */
+    border-color: #6c63ff; /* 加高亮邊框 */
 }
 
 /* 搜尋欄 */
@@ -181,11 +181,11 @@ input[type="date"] {
 
 .seat-map {
     display: grid;
-    grid-template-columns: repeat(2, 1fr) 0.5fr repeat(6, 1fr) 0.5fr repeat(2, 1fr);
+    grid-template-columns: repeat(10, 1fr); /* 10 列座位 */
     gap: 10px; /* 座位間距 */
     justify-content: center; /* 居中對齊 */
     padding: 10px; /* 添加內邊距 */
-    gap : 20px 10px;
+    gap: 20px 10px;
 }
 
 .seat {
@@ -220,6 +220,7 @@ button {
     cursor: pointer;
     font-size: 16px;
 }
+
 button:hover {
     background-color: #0056b3;
 }
@@ -240,8 +241,28 @@ button {
     cursor: pointer;
     width: 48%;
     text-align: center;
+    margin: 20px auto; /* 上下留出間距，水平自動對齊 */
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+.ticket-summary {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.ticket-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

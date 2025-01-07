@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Ticket System</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+
+        .form-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        /* 表單樣式 */
+        .centered-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+        }
+
+        .centered-form label {
+            margin-bottom: 5px;
+        }
+
+        .centered-form input {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .centered-form button {
+            padding: 10px;
+            border: none;
+            background-color: #303133;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="mainbar">
-        <b>萎鏽電影</b>
-        <button class="MemberManage_bt" onclick="GetData()">會員管理</button>
-        <button class="MemberManage_bt">電影管理</button>
-        <button class="MemberManage_bt">XX管理</button>
-    </div>
-    <h1>會員管理</h1>
+<div id="memberContainer" class="form-container">
+    <form id="changeMemberForm"class="centered-form">
+        <h2>管理員登入</h2>
+        <label>UserName:</label>
+        <input type="text" id="UserName"><br><br>
+        <label>Password:</label>
+        <input type="text" id="Password"><br><br>
+        <button type="button" onclick="ManagerLogin()">登入</button>
+    </form>
+</div>
 
-    <table>
-        <thead>
-            <tr class="blackbar">
-                <th>ID</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="member-list">
-
-        </tbody>
-    </table>
-    <script src="script.js"></script>
+<script src="adminscript.js"></script>
 </body>
 </html>

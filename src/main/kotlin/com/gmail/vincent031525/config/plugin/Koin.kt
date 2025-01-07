@@ -1,5 +1,6 @@
 package com.gmail.vincent031525.config.plugin
 
+import com.gmail.vincent031525.data.data_source.dao.SeatDao
 import com.gmail.vincent031525.data.data_source.entity.*
 import com.gmail.vincent031525.data.repository.*
 import com.gmail.vincent031525.domain.repository.*
@@ -13,7 +14,6 @@ import org.koin.dsl.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
-import org.postgresql.ds.PGSimpleDataSource
 
 fun Application.configureKoin() {
     install(Koin) {
@@ -43,16 +43,17 @@ fun Application.configureKoin() {
         SchemaUtils.createMissingTablesAndColumns(MemberEntity)
         SchemaUtils.createMissingTablesAndColumns(TicketStatusEntity)
         SchemaUtils.createMissingTablesAndColumns(SeatEntity)
-        SchemaUtils.createMissingTablesAndColumns(TicketTypeEntity)
         SchemaUtils.createMissingTablesAndColumns(TicketEntity)
     }
 }
 
 fun provideDatabase(): Database {
-    val dataSource = PGSimpleDataSource().apply {
-        user = "postgres"
+    val url = "jdbc:postgresql:///postgres?cloudSqlInstance=bookticket-446304:us-west1:weishow&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
+//    val url = "jdbc:postgresql://34.127.7.65:5432/postgres"
+    return Database.connect(
+        url = url,
+        driver = "org.postgresql.Driver",
+        user = "postgres",
         password = "postgres"
-        databaseName = "weishow"
-    }
-    return Database.connect(dataSource)
+    )
 }

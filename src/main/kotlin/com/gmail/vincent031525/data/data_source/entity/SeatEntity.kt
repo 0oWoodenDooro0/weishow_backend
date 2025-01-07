@@ -9,5 +9,6 @@ object SeatEntity : IntIdTable(name = "seat") {
 
     init {
         uniqueIndex(row, column)
+        uniqueIndex(number)
     }
 }

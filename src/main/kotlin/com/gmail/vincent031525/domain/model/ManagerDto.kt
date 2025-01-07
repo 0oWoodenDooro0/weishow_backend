@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class ManagerDto(
     val id: Int? = null,
     val username: String,
-    val password: String
+    val password: String,
+    val isAdmin: Boolean
 )

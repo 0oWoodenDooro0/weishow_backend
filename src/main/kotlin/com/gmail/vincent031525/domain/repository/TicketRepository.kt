@@ -1,12 +1,13 @@
 package com.gmail.vincent031525.domain.repository
 
-import com.gmail.vincent031525.domain.model.TicketDto
+import com.gmail.vincent031525.domain.model.request.AddTicketRequest
+import com.gmail.vincent031525.domain.model.response.TicketResponse
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 interface TicketRepository {
     suspend fun <T> query(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
-    suspend fun addTicket(ticketDto: TicketDto): Int
-    suspend fun updateTicket(id: Int, ticketDto: TicketDto)
-    suspend fun getTicketsByMemberId(memberId: Int): List<TicketDto>
+    suspend fun addTicket(request: AddTicketRequest): Result<Int>
+    suspend fun deleteTicket(id: Int): Result<Int>
+    suspend fun getTicketsByMemberId(memberId: Int): Result<List<TicketResponse>>
 }

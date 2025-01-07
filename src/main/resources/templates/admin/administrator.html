@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket System</title>
+    <link rel="stylesheet" href="managestyle.css">
+</head>
+<body>
+<div class="mainbar">
+    <b>萎鏽電影</b>
+    <button id = "MbBT" class="MemberManage_bt" onclick="targetPage('memberPage'); GetMemberData()">會員管理</button>
+    <button id = "MvBT" class="MemberManage_bt" onclick="targetPage('moviePage'); GetmovieData(); ">電影管理</button>
+    <button id = "SsBT" class="MemberManage_bt" onclick="targetPage('sessionPage');GetmovieData();">場次管理</button>
+</div>
+
+<div id="memberPage" class="changePage">
+    <div id="memberContainer" class="form-container">
+        <form id="changeMemberForm"class="centered-form">
+            <h2>Member ID: <p id="memberID"></p></h2>
+            <label>new Name:</label>
+            <input type="text" id="changeMemberName"><br>
+            <label>new Email:</label>
+            <input type="text" id="changeEmail"><br>
+            <label>new Password:</label>
+            <input type="text" id="changePassword"><br>
+            <button type="button" onclick="UpdateMemberData()">確認修改</button>
+        </form>
+    </div>
+    <h1>會員管理</h1>
+    <table>
+        <thead>
+        <tr class="blackbar">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th class="actionTH">Actions</th>
+        </tr>
+        </thead>
+        <tbody id="member-list">
+
+        </tbody>
+    </table>
+</div>
+
+
+<div id="moviePage" class="changePage">
+    <div id="formContainer" class="form-container">
+        <form id="changeMovieForm"class="centered-form">
+            <h2>Movie ID: <p id="movieID"></p></h2>
+            <label>new Name:</label>
+            <input type="text" id="changeName" name="changeName"><br>
+            <label>new ReleaseDate:</label>
+            <input type="date" id="changeReleaseDate" name="changeReleaseDate" min="2010-01-01" max="2024-12-31"><br>
+            <label>new DurationMin:</label>
+            <input type="number" id="changeDurationMin" name="changeDurationMin"><br>
+            <label>new Description:</label>
+            <input type="text" id="changeDescription" name="changeDescription"><br>
+            <label>new ContentRatingId:</label>
+            <input type="number" id="changeContentRatingId" name="changeContentRatingId"><br>
+            <label>new ThumbnailPath:</label>
+            <input type="text" id="changeThumbnailPath" name="changeThumbnailPath"><br>
+            <button type="button" onclick="UpdateMovieData()">確認修改</button>
+        </form>
+    </div>
+
+    <h1>電影管理 <button onclick="addform()">新增</button></h1>
+    <div id="addtheform" class="add-form">
+        <h2>新增電影</h2>
+        <form id="addMovieForm">
+            <label>Name:</label>
+            <input type="text" id="newMovieName" name="Name" required><br>
+            <label>ReleaseDate:</label>
+            <input type="date" id="newMovieReleaseDate" name="ReleaseDate" required value="2018-07-22" min="2010-01-01" max="2024-12-31"><br><br>
+            <label>DurationMin:</label>
+            <input type="number" id="newMovieDurationMin" name="DurationMin" required><br>
+            <label>Description:</label>
+            <input type="text" id="newMovieDescription" name="Description" required><br>
+            <label>ContentRatingId:</label>
+            <input type="number" id="newMovieContentRatingId" name="ContentRatingId" required><br>
+            <label>ThumbnailPath:</label>
+            <input type="text" id="newMovieThumbnailPath" name="ThumbnailPath" required><br>
+            <button type="button" onclick="AddmovieData()">確認</button>
+        </form>
+    </div>
+    <table id="movieTable" style="height: 85%;">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 30%;">
+        </colgroup>
+        <thead>
+        <tr class="blackbar">
+            <th></th>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Duration(min)</th>
+            <th>Release Time</th>
+            <th>Content Rating</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="movie-list">
+
+        </tbody>
+    </table>
+</div>
+
+
+<div id="sessionPage" class="changePage">
+
+    <div id="sessionContainer" class="form-container">
+        <form id="changeSessionForm"class="centered-form">
+            <h2>Session ID: <p id="sessionID"></p></h2>
+            <label>new Start Time:</label>
+            <input type="time" id="timeSelect" name="timeSelect" min="09:00" max="22:00"><br>
+            <button type="button" onclick="UpdateSessionData()">確認修改</button>
+        </form>
+    </div>
+
+    <h1 id="thName">場次管理 ---</h1>
+    <select id="SelectMovie" onchange="UpdateSessionLayout()">
+        <option>請選擇</option>
+    </select><br>
+    <button onclick="addSsform()">新增</button>
+    <div id="addsessionform" class="add-form">
+        <h2>新增場次</h2>
+        <form id="addSessionForm">
+            <label>Screen ID:</label>
+            <select id="newScreenID">
+
+            </select><br>
+
+            <label>Start Time:</label>
+            <input type="time" id="newtimeSelect" name="timeSelect" min="09:00" max="22:00" required><br>
+            <button type="button" onclick="AddsessionData()" class="toggle-btn">確認</button>
+        </form>
+    </div>
+
+    <table id="Session-table">
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col style="width: 40%;">
+        </colgroup>
+        <thead id="Session-thd">
+
+        </thead>
+        <tbody id="Session-tbd">
+
+        </tbody>
+    </table>
+</div>
+
+<script src="managescript.js"></script>
+</body>
+</html>

@@ -11,8 +11,7 @@ data class TicketDto(
     val purchseTime: LocalDateTime,
     val date: LocalDate,
     val sessionId: Int,
-    val memberId: Int,
+    val memberId: Int?,
     val statusId: Int,
-    val seatId: Int,
-    val typeId: Int
+    val seatId: Int
 )

@@ -18,8 +18,10 @@ class ManagerRepositoryImpl : ManagerRepository {
 
     override suspend fun login(managerLoginRequest: ManagerLoginRequest): Result<ManagerDto> = try {
         val result = query {
-            ManagerDao.find((ManagerEntity.username eq managerLoginRequest.username) and (ManagerEntity.password eq managerLoginRequest.password))
-                .map { ManagerDto(id = it.id.value, username = it.username, password = it.password) }.single()
+            ManagerDao.find(
+                (ManagerEntity.username eq managerLoginRequest.username) and (ManagerEntity.password eq managerLoginRequest.password)
+            ).map { ManagerDto(id = it.id.value, username = it.username, password = it.password, isAdmin = it.isAdmin) }
+                .single()
         }
         Result.success(result)
     } catch (e: Exception) {

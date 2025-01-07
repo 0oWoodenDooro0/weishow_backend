@@ -73,8 +73,6 @@ fun Application.setBackendRoutes() {
                             call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
                         }
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing field id", null))
                 }
                 delete("/{id}") {
                     val id = call.parameters["id"]
@@ -88,8 +86,6 @@ fun Application.setBackendRoutes() {
                             call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
                         }
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing field id", null))
                 }
                 post("/register") {
                     val body = call.receive<RegisterRequest>()
@@ -148,10 +144,7 @@ fun Application.setBackendRoutes() {
                             call.response.status(HttpStatusCode.BadRequest)
                             call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
                         }
-                        return@put
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
                 delete("/{id}") {
                     val id = call.parameters["id"]
@@ -165,11 +158,22 @@ fun Application.setBackendRoutes() {
                             call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
                         }
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
             }
             route("/screen") {
+                get("/theater/{id}") {
+                    val id = call.parameters["id"]
+                    id?.let {
+                        val response = screenRepository.getScreenByTheaterId(it.toInt())
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
+                    }
+                }
                 post {
                     val body = call.receive<ScreenDto>()
                     val id = screenRepository.addScreen(body)
@@ -178,6 +182,20 @@ fun Application.setBackendRoutes() {
                 }
             }
             route("/seat") {
+                post("/session/{id}"){
+                    val request = call.receive<GetSeatBySessionIdRequest>()
+                    val id = call.parameters["id"]
+                    id?.let { sessionId->
+                        val response = seatRepository.getSeatBySessionId(sessionId.toInt(), request)
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
+                    }
+                }
                 post {
                     val body = call.receive<SeatDto>()
                     val id = seatRepository.addSeat(body)
@@ -187,10 +205,42 @@ fun Application.setBackendRoutes() {
             }
             route("/session") {
                 post {
-                    val body = call.receive<SessionDto>()
-                    val id = sessionRepository.addSession(body)
-                    call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
+                    val body = call.receive<AddSessionRequest>()
+                    val response = sessionRepository.addSession(body)
+                    response.onSuccess {
+                        call.response.status(HttpStatusCode.Created)
+                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", it))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                    }
+                }
+                put("/{id}") {
+                    val id = call.parameters["id"]
+                    val body = call.receive<UpdateSessionRequest>()
+                    id?.let {
+                        val response = sessionRepository.updateSession(it.toInt(), body)
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
+                    }
+                }
+                delete("/{id}") {
+                    val id = call.parameters["id"]
+                    id?.let {
+                        val response = sessionRepository.deleteSession(it.toInt())
+                        response.onSuccess { id ->
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", id))
+                        }.onFailure { failed ->
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
+                        }
+                    }
                 }
                 get("/movie/{id}") {
                     val movieId = call.parameters["id"]
@@ -199,22 +249,18 @@ fun Application.setBackendRoutes() {
                         call.response.status(HttpStatusCode.OK)
                         call.respond(DataResponse(HttpStatusCode.OK.value, "success", response))
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
-                get("/theater/{theaterId}/movie/{movieId}") {
-                    val theaterId = call.parameters["theaterId"]
-                    val movieId = call.parameters["movieId"]
-                    movieId?.let { movieId ->
-                        theaterId?.let { theaterId ->
-                            val response =
-                                sessionRepository.getSessionByTheaterIdAndMovieId(theaterId.toInt(), movieId.toInt())
-                            call.response.status(HttpStatusCode.OK)
-                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", response))
-                        }
+                post("/theater/movie") {
+                    val request = call.receive<GetSessionByTheaterIdAndMovieIdRequest>()
+                    val response =
+                        sessionRepository.getSessionByTheaterIdAndMovieId(request)
+                    response.onSuccess {
+                        call.response.status(HttpStatusCode.OK)
+                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
             }
             route("/theater") {
@@ -239,8 +285,6 @@ fun Application.setBackendRoutes() {
                             call.response.status(HttpStatusCode.BadRequest)
                             call.respond(DataResponse(HttpStatusCode.BadRequest.value, failed.message.toString(), null))
                         }
-                        call.response.status(HttpStatusCode.BadRequest)
-                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                     }
                 }
                 post {
@@ -252,31 +296,41 @@ fun Application.setBackendRoutes() {
             }
             route("/ticket") {
                 post {
-                    val body = call.receive<TicketDto>()
-                    val id = ticketRepository.addTicket(body)
-                    call.response.status(HttpStatusCode.Created)
-                    call.respond(DataResponse(HttpStatusCode.Created.value, "success", id))
-                }
-                put {
-                    val body = call.receive<TicketDto>()
-                    body.id?.let {
-                        ticketRepository.updateTicket(it, body)
-                        call.response.status(HttpStatusCode.OK)
-                        call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
-                        return@put
+                    val request = call.receive<AddTicketRequest>()
+                    val response = ticketRepository.addTicket(request)
+                    response.onSuccess {
+                        call.response.status(HttpStatusCode.Created)
+                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", it))
+                    }.onFailure {
+                        call.response.status(HttpStatusCode.BadRequest)
+                        call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
+                }
+                delete("/ticket/{id}") {
+                    val id = call.parameters["id"]
+                    id?.let {
+                        val response = ticketRepository.deleteTicket(id.toInt())
+                        response.onSuccess {
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
+                        }.onFailure {
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                        }
+                    }
                 }
                 get("/member/{id}") {
                     val id = call.parameters["id"]
                     id?.let {
-                        val tickets = ticketRepository.getTicketsByMemberId(id.toInt())
-                        call.response.status(HttpStatusCode.Created)
-                        call.respond(DataResponse(HttpStatusCode.Created.value, "success", tickets))
+                        val response = ticketRepository.getTicketsByMemberId(id.toInt())
+                        response.onSuccess {
+                            call.response.status(HttpStatusCode.OK)
+                            call.respond(DataResponse(HttpStatusCode.OK.value, "success", it))
+                        }.onFailure {
+                            call.response.status(HttpStatusCode.BadRequest)
+                            call.respond(DataResponse(HttpStatusCode.BadRequest.value, it.message.toString(), null))
+                        }
                     }
-                    call.response.status(HttpStatusCode.BadRequest)
-                    call.respond(DataResponse(HttpStatusCode.BadRequest.value, "Missing Field Id", null))
                 }
             }
         }

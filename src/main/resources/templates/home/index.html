@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Ticket System</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="layout">
@@ -17,9 +17,6 @@
             </li>
             <li>
                 <button onclick="navigateTo('Introducing')">電影介紹</button>
-            </li>
-            <li>
-                <button onclick="navigateTo('schedule')">電影時刻查詢</button>
             </li>
             <li>
                 <button onclick="navigateTo('membership')">會員查詢</button>
@@ -40,10 +37,10 @@
             <h2>訂票</h2>
             <form id="bookingForm">
                 <div class="form-group">
-                    <label for="location">
+                    <label for="theater">
                         <i class="fas fa-map-marker-alt"></i> 請選擇影城
                     </label>
-                    <select id="location" required>
+                    <select id="theater" required>
                     </select>
                 </div>
 
@@ -66,8 +63,7 @@
                     <label for="time">
                         <i class="fas fa-clock"></i> 請選擇場次
                     </label>
-                    <select id="time" required>
-                        <option value="">請選擇場次</option>
+                    <select id="section" required>
                     </select>
                 </div>
                 <div id="seating" class="seating">
@@ -79,14 +75,21 @@
                 </div>
 
                 <div class="buttons">
-                    <button type="button" onclick="goToBooking()">前往訂票</button>
+                    <button type="button" onclick="submitBooking()">確認訂票</button>
                 </div>
             </form>
         </div>
         <!-- 電影介紹 -->
         <div id="Introducing" class="page active">
             <div id="movies" class="movies"></div>
-        </div><!-- 登入表單 -->
+        </div>
+        <div id="membership" class="page"><h2>訂票歷史</h2>
+            <div id="ticketHistory">
+                <div class="ticket-summary"><span>id</span> <span>theaterName</span> <span>screenNumber</span> <span>date</span>
+                    <span>movieName</span> <span>startTime</span> <span>seatNumber</span> <span>price</span></div>
+                <ul id="ticketList"></ul>
+            </div>
+        </div>
         <div id="login" class="page">
             <h1>登入</h1>
             <form id="loginForm">
@@ -117,6 +120,6 @@
     </main>
 </div>
 
-<script src="./script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

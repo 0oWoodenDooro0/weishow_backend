@@ -7,4 +7,8 @@ object ScreenEntity : IntIdTable(name = "screen") {
     val row = integer("row")
     val column = integer("column")
     val theaterId = reference("theater_id", TheaterEntity.id)
+
+    init {
+        uniqueIndex(number, theaterId)
+    }
 }
