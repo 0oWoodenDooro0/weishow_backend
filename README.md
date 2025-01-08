@@ -4,7 +4,7 @@ Kotlin service built with Ktor and Exposed.
 
 ## Requirements 
 
-Kotlin 2.1 w/ Java 21 for building + running the application:
+Kotlin 2.1 w/ Java 17 for building + running the application:
 
 ## Getting started
 
